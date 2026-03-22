@@ -1,42 +1,43 @@
-# ⚡ NexaSMM Bot — Changelog
+# NexaSMM Bot — Changelog
 
-> **Platform:** Telegram Bot (Node.js + Telegraf)  
-> **Integrasi:** MedanPedia API + Pakasir Payment Gateway  
-> **Total File:** 35 file JavaScript
+Platform: Telegram Bot (Node.js + Telegraf)
+Integrasi: MedanPedia API + Pakasir Payment Gateway
+Total File: 35 file JavaScript
 
 ---
 
-## 🆕 v1.1.0 — Markup Pricing System
-> Sistem markup harga otomatis — jual lebih mahal dari harga asli, profit masuk ke kamu.
+## v1.1.0 — Markup Pricing System
 
-### 💹 Fitur Baru
+Sistem markup harga otomatis. Admin set persentase keuntungan, harga tampil ke user sudah include markup, profit tercatat otomatis.
+
+### Fitur Baru
 
 | Fitur | Keterangan |
 |---|---|
-| `services/pricing.js` | Engine hitung markup — support global, per kategori, per layanan spesifik |
-| `/setmarkup global [%]` | Set markup untuk semua layanan sekaligus |
-| `/setmarkup kategori [nama] [%]` | Set markup untuk satu kategori tertentu |
+| `services/pricing.js` | Engine hitung markup — support global, per kategori, per layanan |
+| `/setmarkup global [%]` | Set markup untuk semua layanan |
+| `/setmarkup kategori [nama] [%]` | Set markup untuk satu kategori |
 | `/setmarkup layanan [id] [%]` | Set markup untuk satu layanan spesifik |
-| `/setmarkup info` | Lihat semua markup yang sedang aktif |
+| `/setmarkup info` | Lihat semua markup yang aktif |
 | `/setmarkup reset` | Hapus semua markup kembali ke 0% |
-| Harga Otomatis | Harga di `/services` dan detail layanan sudah include markup otomatis |
-| Pencatatan Profit | Setiap order tercatat profit-nya di `data/profit.json` |
-| Statistik Profit | Panel admin `/admin` → Statistik sekarang tampilkan **Total Profit** |
-| Transparansi Admin | Admin bisa lihat harga asli + markup + profit per order di detail layanan |
-| Pembulatan Cerdas | Harga markup dibulatkan ke atas ke ratusan terdekat |
+| Harga Otomatis | Harga di `/services` dan detail layanan sudah include markup |
+| Pencatatan Profit | Setiap order tercatat profit di `data/profit.json` |
+| Statistik Profit | Panel admin tampilkan total profit |
+| Info Admin | Admin bisa lihat harga asli + markup + profit di detail layanan |
+| Pembulatan | Harga markup dibulatkan ke ratusan terdekat ke atas |
 
-### 🔄 Yang Diperbarui
+### Yang Diperbarui
 
 | File | Perubahan |
 |---|---|
-| `commands/services.js` | Tampilkan harga setelah markup, badge persentase markup |
-| `handlers/callbackHandler.js` | Detail layanan tampil harga markup + info profit khusus admin |
-| `handlers/textHandler.js` | Cek saldo & potong saldo pakai harga markup, catat profit tiap order |
-| `handlers/adminHandler.js` | Statistik tambah baris Total Profit |
-| `services/database.js` | Tambah fungsi `addProfitRecord` & `getProfitStats` |
+| `commands/services.js` | Harga tampil setelah markup |
+| `handlers/callbackHandler.js` | Detail layanan tampil info profit khusus admin |
+| `handlers/textHandler.js` | Saldo dipotong pakai harga markup, profit dicatat |
+| `handlers/adminHandler.js` | Statistik tambah baris total profit |
+| `services/database.js` | Tambah fungsi `addProfitRecord` dan `getProfitStats` |
 | `package.json` | Versi naik ke 1.1.0 |
 
-### 💡 Simulasi Profit dengan Markup 30%
+### Simulasi Profit (markup 30%)
 
 | Layanan | Harga Asli | Harga User | Profit |
 |---|---|---|---|
@@ -46,92 +47,88 @@
 
 ---
 
-## 🚀 v1.0.0 — Initial Release
-> Rilis pertama NexaSMM Bot dengan fitur lengkap siap produksi.
+## v1.0.0 — Initial Release
 
-### 🛒 Fitur Order & Layanan
+Rilis pertama NexaSMM Bot.
+
+### Order & Layanan
 
 | Fitur | Keterangan |
 |---|---|
-| `/services` | Daftar semua layanan dengan **pagination** (8 per halaman) menggunakan inline keyboard |
-| `/order` | Wizard pemesanan bertahap: pilih layanan → target → jumlah → konfirmasi |
-| Panduan Target | Bot otomatis tampilkan format target yang benar berdasarkan platform (IG, TikTok, YT, FB, dll) |
-| Validasi Min/Max | Order ditolak otomatis jika jumlah di bawah minimum atau di atas maksimum layanan |
-| Cek Saldo Sebelum Order | Bot cek saldo user sebelum proses — langsung tolak jika tidak cukup |
-| Detail Layanan | Klik nama layanan → tampil detail lengkap (harga, min, max, tipe, estimasi, deskripsi) |
-| Tombol Order Cepat | Dari halaman detail langsung bisa order tanpa perlu ketik ID manual |
-| `/status` | Cek status pesanan berdasarkan Order ID |
+| `/services` | Daftar layanan dengan pagination (8 per halaman), inline keyboard |
+| `/order` | Wizard pemesanan: pilih layanan → target → jumlah → konfirmasi |
+| Panduan Target | Format target otomatis sesuai platform (IG, TikTok, YT, FB, dll) |
+| Validasi Min/Max | Order ditolak jika jumlah di luar batas layanan |
+| Cek Saldo | Bot cek saldo sebelum proses order |
+| Detail Layanan | Klik layanan untuk lihat detail lengkap |
+| Tombol Order Cepat | Order langsung dari halaman detail tanpa ketik ID manual |
+| `/status` | Cek status pesanan |
 | `/refill` | Request refill pesanan |
-| `/refill_status` | Cek status refill berdasarkan Refill ID |
+| `/refill_status` | Cek status refill |
 
-### 💳 Sistem Saldo & Pembayaran
-
-| Fitur | Keterangan |
-|---|---|
-| `/topup` | Top-up saldo dengan nominal bebas (min Rp 1.000) |
-| QRIS Otomatis | Bot generate gambar QRIS dari Pakasir API menggunakan library `qrcode` |
-| Polling Otomatis | Cek status pembayaran tiap **10 detik** secara otomatis |
-| Cek Manual | Tombol **✅ Cek Status Manual** di bawah QRIS untuk cek instan |
-| Batal Pembayaran | Tombol **❌ Batalkan** untuk membatalkan QRIS yang aktif |
-| Timeout 10 Menit | QRIS otomatis expired setelah 10 menit |
-| `/saldo` | Cek saldo, total topup, dan total order |
-| `/riwayat` | Riwayat 5 topup & 5 order terakhir |
-| Database JSON | Data user, saldo, riwayat topup & order disimpan di `data/users.json` |
-
-### 🔔 Sistem Notifikasi
+### Saldo & Pembayaran
 
 | Fitur | Keterangan |
 |---|---|
-| Notif Order ke Channel | Setiap order berhasil → bot kirim notifikasi ke channel Telegram |
-| Notif Topup ke Channel | Setiap topup berhasil → bot kirim notifikasi + **foto QRIS** ke channel |
-| Auto Notif Order Selesai | Bot polling status order tiap **30 detik**, notif otomatis ke user saat status berubah jadi Success / Partial / Error |
-| Format Notif Lengkap | Notif berisi: nama user, ID, layanan, target, jumlah, biaya, waktu |
+| `/topup` | Top-up saldo (min Rp 1.000) |
+| QRIS | Generate gambar QRIS dari Pakasir via library `qrcode` |
+| Polling Otomatis | Cek status bayar tiap 10 detik |
+| Cek Manual | Tombol cek status di bawah QRIS |
+| Batal | Tombol batalkan QRIS aktif |
+| Timeout | QRIS expired setelah 10 menit |
+| `/saldo` | Cek saldo, total topup, total order |
+| `/riwayat` | 5 topup dan 5 order terakhir |
+| Database | Data disimpan di `data/users.json` |
 
-### 👑 Panel Admin
+### Notifikasi
+
+| Fitur | Keterangan |
+|---|---|
+| Notif Order | Setiap order masuk → notifikasi ke channel |
+| Notif Topup | Topup berhasil → notifikasi + foto QRIS ke channel |
+| Notif Order Selesai | Polling status tiap 30 detik, notif ke user saat Success/Partial/Error |
+
+### Panel Admin
 
 | Fitur | Keterangan |
 |---|---|
 | `/admin` | Panel admin dengan inline keyboard |
-| Statistik | Total user, total topup, total order, total saldo, total profit, jumlah order aktif |
-| Daftar User | Lihat 10 user terbaru + detail per user (saldo, riwayat topup) |
-| Broadcast | Kirim pesan ke **semua user** sekaligus (support HTML formatting) |
-| `/addsaldo [id] [nominal]` | Tambah saldo user secara manual |
-| `/delsaldo [id] [nominal]` | Kurangi saldo user secara manual |
-| Notif ke User | Setiap kelola saldo → user otomatis dapat notifikasi |
-| Proteksi Admin | Semua command admin hanya bisa diakses oleh `ADMIN_ID` di `.env` |
+| Statistik | Total user, topup, order, saldo, profit, order aktif |
+| Daftar User | 10 user terbaru + detail per user |
+| Broadcast | Kirim pesan ke semua user, support HTML formatting |
+| `/addsaldo [id] [nominal]` | Tambah saldo user |
+| `/delsaldo [id] [nominal]` | Kurangi saldo user |
+| Proteksi | Hanya `ADMIN_ID` di `.env` yang bisa akses |
 
-### 🎨 UI & UX
-
-| Fitur | Keterangan |
-|---|---|
-| Menu Bergambar | `/menu` tampilkan foto header + caption profesional |
-| Custom Keyboard | Keyboard shortcut di bawah chat (Order, Cek Status, Layanan, dll) |
-| Auto Delete Pesan | Semua pesan bot terhapus otomatis (3 detik - 10 menit tergantung jenis) |
-| Pesan Error Deskriptif | Setiap error dari API ditampilkan pesannya ke user |
-| Konfirmasi Order | Tampil ringkasan lengkap sebelum konfirmasi |
-
-### 🛠 Teknis & Infrastruktur
+### UI & UX
 
 | Fitur | Keterangan |
 |---|---|
-| Modular Architecture | 35 file terpisah — commands, handlers, services, utils |
-| Session Per User | Setiap user punya session sendiri untuk wizard multi-step |
-| Colored Logger | Console log berwarna dengan level INFO, OK, WARN, ERR, ORDER, BOT |
-| Request Logging | Setiap update dari user tercatat di console |
-| Error Handling | Try-catch di semua layer — API, handler, service |
-| Environment Variables | Semua kredensial di `.env` |
-| Axios Interceptor | Error 4xx dari API ditangkap dan dikembalikan sebagai response |
+| Menu | Foto header + caption + custom keyboard |
+| Auto Delete | Pesan bot terhapus otomatis (3 detik - 10 menit) |
+| Error Message | Pesan error dari API ditampilkan langsung ke user |
+| Konfirmasi Order | Ringkasan lengkap sebelum order diproses |
 
-### 📦 Stack & Dependencies
+### Teknis
+
+| Fitur | Keterangan |
+|---|---|
+| Struktur | Modular, 35 file terpisah |
+| Session | Tiap user punya session sendiri |
+| Logger | Console log berwarna (INFO, OK, WARN, ERR, ORDER) |
+| Error Handling | Try-catch di semua layer |
+| Axios Interceptor | Error 4xx dari API tidak throw, dikembalikan sebagai response |
+
+### Dependencies
 
 | Package | Versi | Fungsi |
 |---|---|---|
 | `telegraf` | ^4.15.3 | Telegram Bot Framework |
-| `axios` | ^1.6.0 | HTTP Client untuk API |
-| `qrcode` | ^1.5.3 | Generate gambar QR dari string |
+| `axios` | ^1.6.0 | HTTP Client |
+| `qrcode` | ^1.5.3 | Generate gambar QR |
 | `dotenv` | ^16.3.1 | Environment variables |
 
-### ⚙️ Environment Variables
+### Environment Variables
 
 | Variable | Keterangan |
 |---|---|
@@ -143,40 +140,36 @@
 | `NOTIFY_CHANNEL_ID` | ID channel notifikasi (opsional) |
 | `ADMIN_ID` | Telegram ID admin |
 
-### 📁 Struktur File
+### Struktur File
 
 ```
 NexaSMM/
-├── index.js                    ← Entry point
-├── .env                        ← Kredensial
-│
-├── commands/                   ← 17 commands
-│   ├── start.js    menu.js     order.js      status.js
-│   ├── services.js topup.js    saldo.js      riwayat.js
-│   ├── refill.js   refill_status.js          help.js
-│   ├── cancel.js   admin.js    addsaldo.js   delsaldo.js
-│   ├── setmarkup.js            balance.js
-│
+├── index.js
+├── .env
+├── commands/           (17 files)
+│   ├── start.js        menu.js         order.js
+│   ├── status.js       services.js     topup.js
+│   ├── saldo.js        riwayat.js      refill.js
+│   ├── refill_status.js help.js        cancel.js
+│   ├── admin.js        addsaldo.js     delsaldo.js
+│   ├── setmarkup.js    balance.js
 ├── handlers/
-│   ├── textHandler.js          ← Wizard multi-step
-│   ├── callbackHandler.js      ← Inline keyboard
-│   ├── topupHandler.js         ← Proses topup QRIS
-│   └── adminHandler.js         ← Panel admin
-│
+│   ├── textHandler.js
+│   ├── callbackHandler.js
+│   ├── topupHandler.js
+│   └── adminHandler.js
 ├── services/
-│   ├── medanpedia.js           ← MedanPedia API
-│   ├── pakasir.js              ← Pakasir Payment
-│   ├── database.js             ← JSON database
-│   ├── notifier.js             ← Notif channel
-│   ├── topupChecker.js         ← Polling topup
-│   ├── orderChecker.js         ← Polling order
-│   └── pricing.js              ← Engine markup harga
-│
-├── data/                       ← Auto dibuat saat runtime
-│   ├── users.json              ← Data user & saldo
-│   ├── markup.json             ← Setting markup
-│   └── profit.json             ← Rekap profit
-│
+│   ├── medanpedia.js
+│   ├── pakasir.js
+│   ├── database.js
+│   ├── notifier.js
+│   ├── topupChecker.js
+│   ├── orderChecker.js
+│   └── pricing.js
+├── data/               (auto dibuat)
+│   ├── users.json
+│   ├── markup.json
+│   └── profit.json
 └── utils/
     ├── autoDelete.js
     ├── formatter.js
@@ -188,18 +181,18 @@ NexaSMM/
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 | Versi | Fitur | Status |
 |---|---|---|
-| v1.0.0 | Initial Release — fitur dasar lengkap | ✅ Done |
-| v1.1.0 | Markup Pricing System + Profit Tracking | ✅ Done |
-| v1.2.0 | Upgrade Database ke MySQL | 🔜 Planned |
-| v1.3.0 | Web Panel Admin | 🔜 Planned |
-| v1.4.0 | Multi Payment Gateway | 🔜 Planned |
-| v1.5.0 | Sistem Referral / Affiliate | 🔜 Planned |
-| v2.0.0 | White Label Ready + Installer Otomatis | 🔜 Planned |
+| v1.0.0 | Initial Release | Done |
+| v1.1.0 | Markup Pricing + Profit Tracking | Done |
+| v1.2.0 | Database MySQL | Planned |
+| v1.3.0 | Web Panel Admin | Planned |
+| v1.4.0 | Multi Payment Gateway | Planned |
+| v1.5.0 | Sistem Referral | Planned |
+| v2.0.0 | White Label + Installer Otomatis | Planned |
 
 ---
 
-*NexaSMM v1.1.0 — Built with ❤️*
+NexaSMM v1.1.0
